@@ -9,6 +9,9 @@ Backups are disabled, because I snapshot my Docker volumes with ZFS
 regularily. To reenable them, just comment out one line from the
 Dockerfile.
 
+**If you like or use this project, please star it ★ on Github and
+  Docker Hub.**
+
 ## Usage
 
 Replace ```{variables}``` properly.
