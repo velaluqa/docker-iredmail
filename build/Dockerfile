@@ -64,8 +64,8 @@ RUN sed s/$(hostname_)/$(cat /opt/hostname | xargs echo -n).$(cat /etc/mailname 
     ; service php5-fpm stop \
     ; service mysql stop \
     ; pkill -sigterm slapd \
-    ; sleep 5
-
+    ; sleep 30 \
+    ; ps aux
 
 WORKDIR /opt
 
