@@ -47,6 +47,7 @@ RUN sed s/$(hostname_)/$(cat /opt/hostname | xargs echo -n).$(cat /etc/mailname 
     && rm /tmp/hosts_ \
     && echo $HOSTNAME > /etc/hostname \
     && IREDMAIL_DEBUG='NO' \
+      CHECK_NEW_IREDMAIL='NO' \
       AUTO_USE_EXISTING_CONFIG_FILE=y \
       AUTO_INSTALL_WITHOUT_CONFIRM=y \
       AUTO_CLEANUP_REMOVE_SENDMAIL=y \
