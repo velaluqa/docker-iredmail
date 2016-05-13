@@ -53,6 +53,9 @@ export VMAIL_DB_BIND_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export VMAIL_DB_ADMIN_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export LDAP_BINDPW='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export LDAP_ADMIN_PW='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
+export LDAP_ROOTPW='#{ldap_root_password}'
+export MYSQL_ROOT_USER='root'
+export MYSQL_ROOT_PASSWD='#{mysql_root_password}'
 export DEFAULT_PASSWORD_SCHEME='SSHA'
 export dn2dnsname="#{dn2dnsname}"
 export LDAP_SUFFIX="dc=#{dn2dnsname}"
@@ -63,10 +66,7 @@ export LDAP_ROOTDN="cn=Manager,dc=#{dn2dnsname}"
 export LDAP_BASEDN_NAME="domains"
 export LDAP_BASEDN="o=domains,dc=#{dn2dnsname}"
 export LDAP_ADMIN_BASEDN="o=domainAdmins,dc=#{dn2dnsname}"
-export LDAP_ROOTPW='#{ldap_root_password}'
-export MYSQL_ROOT_PASSWD='#{mysql_root_password}'
-export MYSQL_ROOT_USER='root'
-export SQL_SERVER='127.0.0.1'
+export SQL_SERVER_ADDRESS='127.0.0.1'
 export SQL_SERVER_PORT='3306'
 export FIRST_DOMAIN='#{first_domain}'
 export DOMAIN_ADMIN_NAME='postmaster'
@@ -83,11 +83,11 @@ export USE_RCM='YES'
 export USE_AWSTATS='YES'
 export USE_FAIL2BAN='YES'
 export AMAVISD_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
-export CLUEBRINGER_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export IREDADMIN_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export RCM_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export SOGO_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export SOGO_SIEVE_MASTER_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
+export IREDAPD_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 #EOF
 EOF
 end

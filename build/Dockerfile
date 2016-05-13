@@ -22,7 +22,7 @@ RUN apt-get -q update \
       iptables \
       augeas-tools
 
-ENV IREDMAIL_VERSION 0.9.2
+ENV IREDMAIL_VERSION 0.9.4
 ARG HOSTNAME=mail
 ARG DOMAIN
 
@@ -88,8 +88,6 @@ RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh \
 # Disable backups
 RUN sed -i '/\/var\/vmail\/backup/d' /var/spool/cron/crontabs/root
 
-RUN sed -i '/init.d/c /etc/init.d/iredapd stop' /etc/logrotate.d/iredapd
-
 # Use one DKIM key for all domains
 RUN sed -i s/^dkim_key\(\"$DOMAIN\"/dkim_key\(\"*\"/ /etc/amavis/conf.d/50-user
 
@@ -111,7 +109,6 @@ ADD services/amavis.sh /etc/service/amavis/run
 ADD services/clamav-freshclam.sh /etc/service/clamav-freshclam/run
 ADD services/uwsgi-iredadmin.sh /etc/service/uwsgi-iredadmin/run
 ADD services/fail2ban.sh /etc/service/fail2ban/run
-ADD services/postfix-cluebringer.sh /etc/service/postfix-cluebringer/run
 
 # Purge some packets and save disk space
 RUN apt-get purge -y -q dialog apt-utils augeas-tools \
