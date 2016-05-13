@@ -1,5 +1,11 @@
 #!/bin/sh
 
+FILES="localtime services resolv.conf hosts"
+for file in $FILES; do
+    cp /etc/${file} /var/spool/postfix/etc/${file}
+    chmod a+rX /var/spool/postfix/etc/${file}
+done
+
 trap_hup_signal() {
     echo "Reloading (from SIGHUP)"
     postfix reload
