@@ -70,6 +70,11 @@ RUN sed s/$(hostname_)/$(cat /opt/hostname | xargs echo -n).$(cat /etc/mailname 
 
 WORKDIR /opt
 
+# Update debian system config for mysql
+RUN bash -c "source iredmail/config \
+    && sed -i s\/password\\\\\(\ *\\\\\).*\/password\\\\1=\ \\\"\$MYSQL_ROOT_PASSWD\\\"\/ /etc/mysql/debian.cnf \
+    && sed -i s\/user\\\\\(\ *\\\\\).*\/user\\\\1=\ \$MYSQL_ROOT_USER\/ /etc/mysql/debian.cnf"
+
 RUN mv /opt/iredmail/iRedMail.tips /opt \
     && rm -rf /opt/iredmail /root/.bash_history \
     && mv -f /bin/uname_ /bin/uname \
