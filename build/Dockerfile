@@ -120,6 +120,3 @@ RUN apt-get purge -y -q dialog apt-utils augeas-tools \
     && apt-get autoremove -y -q \
     && apt-get clean -y -q \
     && rm -rf /var/lib/apt/lists/*
-
-# Fix until https://github.com/phusion/baseimage-docker/pull/292 has been merged
-RUN sed -i s/cron-log-forwarder/syslog-forwarder/ /etc/logrotate.d/syslog-ng
