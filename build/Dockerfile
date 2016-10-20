@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.18
+FROM phusion/baseimage:0.9.19
 MAINTAINER velaluqa GmbH <info@velalu.qa>
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -22,7 +22,7 @@ RUN apt-get -q update \
       iptables \
       augeas-tools
 
-ENV IREDMAIL_VERSION 0.9.4
+ENV IREDMAIL_VERSION 0.9.5-1
 ARG HOSTNAME=mail
 ARG DOMAIN
 
@@ -107,7 +107,7 @@ ADD services/slapd.sh /etc/service/slapd/run
 ADD services/mysql.sh /etc/service/mysql/run
 ADD services/nginx.sh /etc/service/nginx/run
 ADD services/dovecot.sh /etc/service/dovecot/run
-ADD services/php5-fpm.sh /etc/service/php5-fpm/run
+ADD services/php-fpm.sh /etc/service/php-fpm/run
 ADD services/postfix.sh /etc/service/postfix/run
 ADD services/clamav-daemon.sh /etc/service/clamav-daemon/run
 ADD services/amavis.sh /etc/service/amavis/run
@@ -120,3 +120,6 @@ RUN apt-get purge -y -q dialog apt-utils augeas-tools \
     && apt-get autoremove -y -q \
     && apt-get clean -y -q \
     && rm -rf /var/lib/apt/lists/*
+
+# Fix php-fpm pid location
+RUN sed -i s/\\/run\\/php/\\/run/ /etc/php/7.0/fpm/php-fpm.conf

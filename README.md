@@ -65,6 +65,48 @@ Replace ```{variables}``` properly.
        - NET_ADMIN
    ```
 
+## Upgrade notices
+
+### 0.9.4 -> 0.9.5(-1)
+
+First, shutdown your running iRedMail container.
+
+#### MySQL
+
+MySQL has been updated from 5.5 to 5.7, so we need to run the
+`mysql_upgrade` command *twice*. Please set your path accordingly.
+
+	```
+	docker run -it --rm -v /path/to/mail-mysql-data:/var/lib/mysql mysql:5.6 bash`
+	```
+
+Inside the container, run:
+
+	```
+	chown -R mysql:mysql /var/lib/mysql
+	mysqld_safe
+	```
+
+In a second shell (`docker exec -it {CONTAINER_NAME} bash`), run:
+
+	```
+	mysql_upgrade -u root -p
+	mysqladmin -u root -p shutdown
+	```
+
+Afterwards, repeat the same steps with `mysql:5.7`.
+
+#### Slapd
+
+Slapd database backend has changed from `hdb` to `mdb`, so we need to
+export and import again our data. Please set your `{dn2dnsname}` and
+paths accordingly.
+
+	```
+	docker run -i --rm -v /path/to/slapd-data:/var/lib/ldap/{dn2dnsname} iredmail:0.9.4-2 slapcat -f /etc/ldap/slapd.conf > ldap_export.ldif
+	docker run -i --rm -v /path/to/slapd-data-new:/var/lib/ldap/{dn2dnsname} iredmail:0.9.5-1 slapadd -f /etc/ldap/slapd.conf < ldap_export.ldif
+	```
+
 ## Contribution
 
 Pull requests very welcome! :-)
