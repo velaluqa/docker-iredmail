@@ -22,7 +22,7 @@ RUN apt-get -q update \
       iptables \
       augeas-tools
 
-ENV IREDMAIL_VERSION 0.9.4
+ENV IREDMAIL_VERSION 0.9.5
 ARG HOSTNAME=mail
 ARG DOMAIN
 
