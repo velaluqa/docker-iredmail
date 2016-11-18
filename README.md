@@ -18,11 +18,11 @@ Replace ```{variables}``` properly.
 
 1. Generate your iRedMail config file using the @configure@ script.
    Amend passwords and LDAP nodes as you wish afterwards.
-2. Build your image with ```docker build -t iredmail:0.9.2.0
+2. Build your image with ```docker build -t iredmail:0.9.5-1
    --build-arg DOMAIN={first domain} build/```. Note that this step
    will take some time.
 3. Create an intermediate container with ```docker create
-   --name=iredmail iredmail:0.9.2.0```.
+   --name=iredmail iredmail:0.9.5-1```.
 4. Extract some folders from the intermediate container and fix the
    owners:
 
