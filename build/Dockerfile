@@ -1,4 +1,4 @@
-FROM phusion/baseimage
+FROM phusion/baseimage:0.9.18
 MAINTAINER velaluqa GmbH <info@velalu.qa>
 
 ENV DEBIAN_FRONTEND noninteractive
