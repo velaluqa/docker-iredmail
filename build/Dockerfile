@@ -20,7 +20,8 @@ RUN apt-get -q update \
       dovecot-pop3d \
       dovecot-sieve \
       iptables \
-      augeas-tools
+      augeas-tools \
+    && apt-get clean
 
 ENV IREDMAIL_VERSION 0.9.5-1
 ARG HOSTNAME=mail
@@ -57,6 +58,7 @@ RUN sed s/$(hostname_)/$(cat /opt/hostname | xargs echo -n).$(cat /etc/mailname 
       AUTO_CLEANUP_REPLACE_MYSQL_CONFIG=y \
       AUTO_CLEANUP_RESTART_POSTFIX=n \
       bash iRedMail.sh \
+    && apt-get clean \
     ; service nginx stop \
     ; service clamav-freshclam stop \
     ; service clamav-daemon stop \
@@ -114,12 +116,6 @@ ADD services/amavis.sh /etc/service/amavis/run
 ADD services/clamav-freshclam.sh /etc/service/clamav-freshclam/run
 ADD services/uwsgi-iredadmin.sh /etc/service/uwsgi-iredadmin/run
 ADD services/fail2ban.sh /etc/service/fail2ban/run
-
-# Purge some packets and save disk space
-RUN apt-get purge -y -q dialog apt-utils augeas-tools \
-    && apt-get autoremove -y -q \
-    && apt-get clean -y -q \
-    && rm -rf /var/lib/apt/lists/*
 
 # Fix php-fpm pid location
 RUN sed -i s/\\/run\\/php/\\/run/ /etc/php/7.0/fpm/php-fpm.conf
