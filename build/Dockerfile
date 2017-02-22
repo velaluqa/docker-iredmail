@@ -43,6 +43,8 @@ RUN wget -O - https://bitbucket.org/zhb/iredmail/downloads/iRedMail-"${IREDMAIL_
 
 COPY ./config ./
 
+# Run iRedMail setup script
+# Start and stop some services for environment setup (e.g. create folders in /var/run)
 RUN sed s/$(hostname_)/$(cat /opt/hostname | xargs echo -n).$(cat /etc/mailname | xargs echo -n)/ /etc/hosts > /tmp/hosts_ \
     && cat /tmp/hosts_ > /etc/hosts \
     && rm /tmp/hosts_ \
@@ -61,15 +63,11 @@ RUN sed s/$(hostname_)/$(cat /opt/hostname | xargs echo -n).$(cat /etc/mailname 
       AUTO_CLEANUP_RESTART_POSTFIX=n \
       bash iRedMail.sh \
     && apt-get clean \
-    ; service nginx stop \
-    ; service clamav-freshclam stop \
+    ; service clamav-daemon start \
     ; service clamav-daemon stop \
+    ; service amavis start \
     ; service amavis stop \
-    ; pkill -sigterm master \
-    ; service php5-fpm stop \
     ; service mysql stop \
-    ; pkill -sigterm slapd \
-    ; sleep 30 \
     ; ps aux
 
 WORKDIR /opt
