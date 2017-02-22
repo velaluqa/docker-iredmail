@@ -84,12 +84,7 @@ Inside the container, run:
 
 	```
 	chown -R mysql:mysql /var/lib/mysql
-	mysqld_safe
-	```
-
-In a second shell (`docker exec -it {CONTAINER_NAME} bash`), run:
-
-	```
+	mysqld_safe &
 	mysql_upgrade -u root -p
 	mysqladmin -u root -p shutdown
 	```
