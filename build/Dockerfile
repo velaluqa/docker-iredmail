@@ -63,6 +63,7 @@ RUN sed s/$(hostname_)/$(cat /opt/hostname | xargs echo -n).$(cat /etc/mailname 
       AUTO_CLEANUP_RESTART_POSTFIX=n \
       bash iRedMail.sh \
     && apt-get clean \
+    && /usr/lib/php/php7.0-fpm-checkconf \
     ; service clamav-daemon start \
     ; service clamav-daemon stop \
     ; service amavis start \
@@ -117,5 +118,3 @@ ADD services/clamav-freshclam.sh /etc/service/clamav-freshclam/run
 ADD services/uwsgi-iredadmin.sh /etc/service/uwsgi-iredadmin/run
 ADD services/fail2ban.sh /etc/service/fail2ban/run
 
-# Fix php-fpm pid location
-RUN sed -i s/\\/run\\/php/\\/run/ /etc/php/7.0/fpm/php-fpm.conf
