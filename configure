@@ -24,9 +24,9 @@ begin
 end while ldap_root_password.empty?
 
 begin
-  print 'Enter MYSQL root password: '
-  mysql_root_password = $stdin.gets.strip
-end while mysql_root_password.empty?
+  print 'Enter database root password: '
+  database_root_password = $stdin.gets.strip
+end while database_root_password.empty?
 
 begin
   print 'Enter postmaster password: '
@@ -41,10 +41,6 @@ export VMAIL_USER_HOME_DIR='/var/vmail'
 export STORAGE_BASE_DIR='/var/vmail'
 export STORAGE_MAILBOX_DIR='/var/vmail/vmail1'
 export SIEVE_DIR='/var/vmail/sieve'
-export BACKUP_DIR='/var/vmail/backup'
-export BACKUP_SCRIPT_OPENLDAP='/var/vmail/backup/backup_openldap.sh'
-export BACKUP_SCRIPT_MYSQL='/var/vmail/backup/backup_mysql.sh'
-export BACKUP_SCRIPT_PGSQL='/var/vmail/backup/backup_pgsql.sh'
 export WEB_SERVER_IS_NGINX='YES'
 export WEB_SERVER_IS_APACHE='NO'
 export BACKEND_ORIG='OPENLDAP'
@@ -55,8 +51,13 @@ export LDAP_BINDPW='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export LDAP_ADMIN_PW='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export LDAP_ROOTPW='#{ldap_root_password}'
 export MYSQL_ROOT_USER='root'
-export MYSQL_ROOT_PASSWD='#{mysql_root_password}'
-export DEFAULT_PASSWORD_SCHEME='SSHA'
+export MYSQL_ROOT_PASSWD='#{database_root_password}'
+export PGSQL_ROOT_USER=''
+export PGSQL_ROOT_PASSWD='#{database_root_password}'
+export BACKUP_DIR='/var/vmail/backup'
+export BACKUP_SCRIPT_LDAP='/var/vmail/backup/backup_openldap.sh'
+export BACKUP_SCRIPT_MYSQL='/var/vmail/backup/backup_mysql.sh'
+export BACKUP_SCRIPT_PGSQL='/var/vmail/backup/backup_pgsql.sh'
 export dn2dnsname="#{dn2dnsname}"
 export LDAP_SUFFIX="dc=#{dn2dnsname}"
 export LDAP_SUFFIX_MAJOR="#{dn2dnsname}"
@@ -77,10 +78,8 @@ export SITE_ADMIN_PASSWD='#{postmaster_password}'
 export FIRST_USER='postmaster'
 export FIRST_USER_PASSWD='#{postmaster_password}'
 export FIRST_USER_PASSWD_PLAIN='#{postmaster_password}'
-export ENABLE_DKIM='YES'
 export USE_IREDADMIN='YES'
 export USE_RCM='YES'
-export USE_AWSTATS='YES'
 export USE_FAIL2BAN='YES'
 export AMAVISD_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export IREDADMIN_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'

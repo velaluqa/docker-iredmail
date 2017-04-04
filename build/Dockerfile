@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.18
+FROM phusion/baseimage:0.9.19
 MAINTAINER velaluqa GmbH <info@velalu.qa>
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -20,9 +20,10 @@ RUN apt-get -q update \
       dovecot-pop3d \
       dovecot-sieve \
       iptables \
-      augeas-tools
+      augeas-tools \
+    && apt-get clean
 
-ENV IREDMAIL_VERSION 0.9.4
+ENV IREDMAIL_VERSION 0.9.5-1
 ARG HOSTNAME=mail
 ARG DOMAIN
 
@@ -42,10 +43,14 @@ RUN wget -O - https://bitbucket.org/zhb/iredmail/downloads/iRedMail-"${IREDMAIL_
 
 COPY ./config ./
 
+# Run iRedMail setup script
+# Start and stop some services for environment setup (e.g. create folders in /var/run)
 RUN sed s/$(hostname_)/$(cat /opt/hostname | xargs echo -n).$(cat /etc/mailname | xargs echo -n)/ /etc/hosts > /tmp/hosts_ \
     && cat /tmp/hosts_ > /etc/hosts \
     && rm /tmp/hosts_ \
     && echo $HOSTNAME > /etc/hostname \
+    && apt-get install mysql-server -y -q \
+    && service mysql start \
     && IREDMAIL_DEBUG='NO' \
       CHECK_NEW_IREDMAIL='NO' \
       AUTO_USE_EXISTING_CONFIG_FILE=y \
@@ -57,15 +62,13 @@ RUN sed s/$(hostname_)/$(cat /opt/hostname | xargs echo -n).$(cat /etc/mailname 
       AUTO_CLEANUP_REPLACE_MYSQL_CONFIG=y \
       AUTO_CLEANUP_RESTART_POSTFIX=n \
       bash iRedMail.sh \
-    ; service nginx stop \
-    ; service clamav-freshclam stop \
+    && apt-get clean \
+    && /usr/lib/php/php7.0-fpm-checkconf \
+    ; service clamav-daemon start \
     ; service clamav-daemon stop \
+    ; service amavis start \
     ; service amavis stop \
-    ; pkill -sigterm master \
-    ; service php5-fpm stop \
     ; service mysql stop \
-    ; pkill -sigterm slapd \
-    ; sleep 30 \
     ; ps aux
 
 WORKDIR /opt
@@ -107,7 +110,7 @@ ADD services/slapd.sh /etc/service/slapd/run
 ADD services/mysql.sh /etc/service/mysql/run
 ADD services/nginx.sh /etc/service/nginx/run
 ADD services/dovecot.sh /etc/service/dovecot/run
-ADD services/php5-fpm.sh /etc/service/php5-fpm/run
+ADD services/php-fpm.sh /etc/service/php-fpm/run
 ADD services/postfix.sh /etc/service/postfix/run
 ADD services/clamav-daemon.sh /etc/service/clamav-daemon/run
 ADD services/amavis.sh /etc/service/amavis/run
@@ -115,8 +118,3 @@ ADD services/clamav-freshclam.sh /etc/service/clamav-freshclam/run
 ADD services/uwsgi-iredadmin.sh /etc/service/uwsgi-iredadmin/run
 ADD services/fail2ban.sh /etc/service/fail2ban/run
 
-# Purge some packets and save disk space
-RUN apt-get purge -y -q dialog apt-utils augeas-tools \
-    && apt-get autoremove -y -q \
-    && apt-get clean -y -q \
-    && rm -rf /var/lib/apt/lists/*

@@ -20,7 +20,7 @@ trap_term_signal() {
 trap "trap_hup_signal" HUP
 trap "trap_term_signal" TERM
 
-/usr/lib/postfix/master -c /etc/postfix -d &
+/usr/lib/postfix/sbin/master -c /etc/postfix -d &
 pid=$!
 
 # Loop "wait" until the postfix master exits
