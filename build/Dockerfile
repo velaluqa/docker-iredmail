@@ -1,5 +1,5 @@
 FROM phusion/baseimage:0.9.19
-MAINTAINER velaluqa GmbH <info@velalu.qa>
+LABEL maintainer "velaluqa GmbH <info@velalu.qa>"
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo "APT::Install-Recommends 0;" >> /etc/apt/apt.conf.d/01-no-recommends \
