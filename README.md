@@ -102,6 +102,13 @@ docker run -i --rm -v /path/to/slapd-data:/var/lib/ldap/{dn2dnsname} iredmail:0.
 docker run -i --rm -v /path/to/slapd-data-new:/var/lib/ldap/{dn2dnsname} iredmail:0.9.5-1 slapadd -f /etc/ldap/slapd.conf < ldap_export.ldif
 ```
 
+Now, restart your iRedMail container using the new `iredmail:0.9.5-1` image.
+
+#### Roundcube
+
+Within the recreated container, changedir into
+`/opt/www/roundcubemail` and run `bin/update.sh`.
+
 ## Contribution
 
 Pull requests very welcome! :-)
