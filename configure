@@ -14,11 +14,6 @@ if dn2dnsname.empty?
 end
 
 begin
-  print 'Enter first domain: '
-  first_domain = $stdin.gets.strip
-end while first_domain.empty?
-
-begin
   print 'Enter LDAP root password: '
   ldap_root_password = $stdin.gets.strip
 end while ldap_root_password.empty?
@@ -37,48 +32,22 @@ PASSWORD_CHARS = ('A'..'Z').to_a + ('a'..'z').to_a + (0..9).to_a
 
 File.open(config_path, 'w') do |f|
   f << <<EOF
-export VMAIL_USER_HOME_DIR='/var/vmail'
+# 0.9.6
 export STORAGE_BASE_DIR='/var/vmail'
-export STORAGE_MAILBOX_DIR='/var/vmail/vmail1'
-export SIEVE_DIR='/var/vmail/sieve'
-export WEB_SERVER_IS_NGINX='YES'
-export WEB_SERVER_IS_APACHE='NO'
+export WEB_SERVER='NGINX'
 export BACKEND_ORIG='OPENLDAP'
 export BACKEND='OPENLDAP'
 export VMAIL_DB_BIND_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export VMAIL_DB_ADMIN_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
+export LDAP_SUFFIX='dc=#{dn2dnsname}'
 export LDAP_BINDPW='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export LDAP_ADMIN_PW='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export LDAP_ROOTPW='#{ldap_root_password}'
-export MYSQL_ROOT_USER='root'
 export MYSQL_ROOT_PASSWD='#{database_root_password}'
-export PGSQL_ROOT_USER=''
-export PGSQL_ROOT_PASSWD='#{database_root_password}'
-export BACKUP_DIR='/var/vmail/backup'
-export BACKUP_SCRIPT_LDAP='/var/vmail/backup/backup_openldap.sh'
-export BACKUP_SCRIPT_MYSQL='/var/vmail/backup/backup_mysql.sh'
-export BACKUP_SCRIPT_PGSQL='/var/vmail/backup/backup_pgsql.sh'
-export dn2dnsname="#{dn2dnsname}"
-export LDAP_SUFFIX="dc=#{dn2dnsname}"
-export LDAP_SUFFIX_MAJOR="#{dn2dnsname}"
-export LDAP_BINDDN="cn=vmail,dc=#{dn2dnsname}"
-export LDAP_ADMIN_DN="cn=vmailadmin,dc=#{dn2dnsname}"
-export LDAP_ROOTDN="cn=Manager,dc=#{dn2dnsname}"
-export LDAP_BASEDN_NAME="domains"
-export LDAP_BASEDN="o=domains,dc=#{dn2dnsname}"
-export LDAP_ADMIN_BASEDN="o=domainAdmins,dc=#{dn2dnsname}"
-export SQL_SERVER_ADDRESS='127.0.0.1'
-export SQL_SERVER_PORT='3306'
-export DOMAIN_ADMIN_NAME='postmaster'
-export SITE_ADMIN_NAME='postmaster@#{first_domain}'
 export DOMAIN_ADMIN_PASSWD_PLAIN='#{postmaster_password}'
-export DOMAIN_ADMIN_PASSWD='#{postmaster_password}'
-export SITE_ADMIN_PASSWD='#{postmaster_password}'
-export FIRST_USER='postmaster'
-export FIRST_USER_PASSWD='#{postmaster_password}'
-export FIRST_USER_PASSWD_PLAIN='#{postmaster_password}'
 export USE_IREDADMIN='YES'
-export USE_RCM='YES'
+export USE_ROUNDCUBE='YES'
+export USE_AWSTATS='YES'
 export USE_FAIL2BAN='YES'
 export AMAVISD_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export IREDADMIN_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
@@ -86,6 +55,13 @@ export RCM_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export SOGO_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export SOGO_SIEVE_MASTER_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
 export IREDAPD_DB_PASSWD='#{(0...30).map { PASSWORD_CHARS.sample }.join}'
+# phusion/baseimage uses Ubuntu, but replaces rsyslog with syslog-ng
+export SYSLOG_DAEMON_USER='root'
+export SYSLOG_DAEMON_GROUP='root'
+export SYSLOG_CONF='/dev/null' # We add our own openldap syslog configuration
+export SYSLOG_CONF_DIR='/etc/syslog-ng/conf.d'
+export SYSLOG_POSTROTATE_CMD='sv reload syslog-ng > /dev/null'
+export USE_SYSTEMD='NO'        # Make sure to install init.d files
 #EOF
 EOF
 end

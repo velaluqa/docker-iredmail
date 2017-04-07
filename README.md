@@ -20,11 +20,11 @@ Replace ```{variables}``` properly.
    Amend passwords as you wish afterwards. If you are updating your
    container, read "Upgrading your container to a new version of
    iRedMail" below first.
-2. Build your image with ```docker build -t iredmail:0.9.2-0
+2. Build your image with ```docker build -t iredmail:0.9.6-0
    --build-arg DOMAIN={first domain} build/```. Note that this step
    will take some time.
 3. Create an intermediate container with ```docker create
-   --name=iredmail iredmail:0.9.2-0```.
+   --name=iredmail iredmail:0.9.6-0```.
 4. Extract some folders from the intermediate container and fix the
    owners:
 
@@ -131,6 +131,18 @@ Now, restart your iRedMail container using the new `iredmail:0.9.5-1` image.
 
 Within the recreated container, changedir into
 `/opt/www/roundcubemail` and run `bin/update.sh`.
+
+### 0.9.5(-1) -> 0.9.6
+
+Restart your iRedMail container using the new `iredmail:0.9.6` image.
+
+#### iRedAPD
+
+Execute the following SQL in iredapd's MySQL database:
+
+```
+CREATE INDEX client_address_passed ON greylisting_tracking (client_address, passed);
+```
 
 ## Contribution
 
