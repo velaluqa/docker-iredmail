@@ -60,7 +60,7 @@ RUN sed s/$(hostname_)/$(cat /opt/hostname | xargs echo -n).$(cat /etc/mailname 
       AUTO_CLEANUP_REPLACE_FIREWALL_RULES=n \
       AUTO_CLEANUP_RESTART_IPTABLES=n \
       AUTO_CLEANUP_REPLACE_MYSQL_CONFIG=y \
-      AUTO_CLEANUP_RESTART_POSTFIX=n \
+      FIRST_DOMAIN=$DOMAIN \
       bash iRedMail.sh \
     && apt-get clean \
     && /usr/lib/php/php7.0-fpm-checkconf \

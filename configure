@@ -69,7 +69,6 @@ export LDAP_BASEDN="o=domains,dc=#{dn2dnsname}"
 export LDAP_ADMIN_BASEDN="o=domainAdmins,dc=#{dn2dnsname}"
 export SQL_SERVER_ADDRESS='127.0.0.1'
 export SQL_SERVER_PORT='3306'
-export FIRST_DOMAIN='#{first_domain}'
 export DOMAIN_ADMIN_NAME='postmaster'
 export SITE_ADMIN_NAME='postmaster@#{first_domain}'
 export DOMAIN_ADMIN_PASSWD_PLAIN='#{postmaster_password}'
