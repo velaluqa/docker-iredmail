@@ -16,8 +16,10 @@ Dockerfile.
 
 Replace ```{variables}``` properly.
 
-1. Generate your iRedMail config file using the @configure@ script.
-   Amend passwords and LDAP nodes as you wish afterwards.
+1. Generate your iRedMail `config` file using the `configure` script.
+   Amend passwords as you wish afterwards. If you are updating your
+   container, read "Upgrading your container to a new version of
+   iRedMail" below first.
 2. Build your image with ```docker build -t iredmail:0.9.2-0
    --build-arg DOMAIN={first domain} build/```. Note that this step
    will take some time.
@@ -64,6 +66,27 @@ Replace ```{variables}``` properly.
        - SYS_PTRACE # for UWSGI-iRedAdmin runsv script
        - NET_ADMIN
    ```
+7. Save your configuration file `build/config` in a save place. You
+   will urgently need it if you are upgrading your container to a new
+   version of iRedMail in future.
+
+## Upgrading your container to a new version of iRedMail
+
+The configuration variables may change from release to release, so you
+have to recreate this file using the `configure` script if you are
+updating to a new version of iRedMail. You pick dummy values for all
+passwords.
+
+Afterwards, compare it to your former config file and copy all
+passwords from the old to the new config file. Your `LDAP_SUFFIX`
+should not have changed, too - check the `dn2dnsname` you have
+provided if this is the case.
+
+Using this updated `config` file, build your updated iRedMail
+container (see "Usage" above from step 2 on).
+
+If you have lost the `config` file, you can restore all passwords
+manually from `/opt/iRedMail.tips` within your current container.
 
 ## Upgrade notices
 
