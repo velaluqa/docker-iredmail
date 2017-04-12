@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.20
+FROM phusion/baseimage:0.9.21
 LABEL maintainer "velaluqa GmbH <info@velalu.qa>"
 
 ENV DEBIAN_FRONTEND noninteractive
