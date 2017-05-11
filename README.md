@@ -93,6 +93,18 @@ manually from `/opt/iRedMail.tips` within your current container.
 If you're uncertain, do not skip releases and only update from one
 release to the release immediately following it.
 
+### 0.9.5(-1) -> 0.9.6
+
+Restart your iRedMail container using the new `iredmail:0.9.6` image.
+
+#### iRedAPD
+
+Execute the following SQL in iredapd's MySQL database:
+
+```
+CREATE INDEX client_address_passed ON greylisting_tracking (client_address, passed);
+```
+
 ### 0.9.4 -> 0.9.5(-1)
 
 First, shutdown your running iRedMail container.
@@ -134,18 +146,6 @@ Now, restart your iRedMail container using the new `iredmail:0.9.5-1` image.
 
 Within the recreated container, changedir into
 `/opt/www/roundcubemail` and run `bin/update.sh`.
-
-### 0.9.5(-1) -> 0.9.6
-
-Restart your iRedMail container using the new `iredmail:0.9.6` image.
-
-#### iRedAPD
-
-Execute the following SQL in iredapd's MySQL database:
-
-```
-CREATE INDEX client_address_passed ON greylisting_tracking (client_address, passed);
-```
 
 ## Contribution
 
