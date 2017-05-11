@@ -90,6 +90,9 @@ manually from `/opt/iRedMail.tips` within your current container.
 
 ## Upgrade notices
 
+If you're uncertain, do not skip releases and only update from one
+release to the release immediately following it.
+
 ### 0.9.4 -> 0.9.5(-1)
 
 First, shutdown your running iRedMail container.
