@@ -101,6 +101,9 @@ RUN sed -i '/\/var\/vmail\/backup/d' /var/spool/cron/crontabs/root
 # Use one DKIM key for all domains
 RUN sed -i s/^dkim_key\(\"$DOMAIN\"/dkim_key\(\"*\"/ /etc/amavis/conf.d/50-user
 
+# Bounce banned emails instead of discarding them
+RUN sed -i "s/=> 'DISCARD'],/=> 'BOUNCE'],/" /etc/amavis/conf.d/50-user
+
 # Amend config files for runsv compatibility
 RUN sed -i '/^Foreground /c Foreground true' /etc/clamav/clamd.conf \
     && sed -i '/init.d/c pkill -sighup clamd' /etc/logrotate.d/clamav-daemon \
